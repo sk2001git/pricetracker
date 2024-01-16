@@ -80,12 +80,13 @@ export async function generateEmailBody(
 const smtpConfig = {
   pool: true, 
   service: 'hotmail',
-  port: 2525,
+  port: 2525 ,
   auth: {
     user: 'seanwebsiteupdate@outlook.com',
     pass: process.env.EMAIL_PASSWORD,
   },
   maxConnections: 1,
+  ignoreTLS: true,
 };
 
 const transporter = nodemailer.createTransport(smtpConfig);
