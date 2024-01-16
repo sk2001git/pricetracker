@@ -7,6 +7,7 @@ import { Product } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { useEffect } from "react";
 
 type Props = {
   params: { id: string }
@@ -18,6 +19,18 @@ const ProductDetails = async ({ params: { id } }: Props) => {
   if(!product) redirect('/')
 
   const similarProducts = await getSimilarProducts(id);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/cron'); // Replace with your API route
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  fetchData();
+
 
   return (
     <div className="product-container">
