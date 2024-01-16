@@ -75,7 +75,9 @@ export async function generateEmailBody(
   return { subject, body };
 }
 
-const transporter = nodemailer.createTransport({
+//https://stackoverflow.com/questions/38024428/error-connect-econnrefused-127-0-0-1465-nodemailer 
+// Basically having a @ in the createTransport causes some parser issue
+const smtpConfig = {
   pool: true, 
   service: 'hotmail',
   port: 2525,
@@ -84,7 +86,9 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASSWORD,
   },
   maxConnections: 1,
-});
+};
+
+const transporter = nodemailer.createTransport(smtpConfig);
 
 
 export const sendEmail = async (emailContent: EmailContent, sendTo:string[]) => {
