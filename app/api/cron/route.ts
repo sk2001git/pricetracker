@@ -6,6 +6,8 @@ import { scrapeAmazonProduct } from "@/lib/scraper";
 import { getAveragePrice, getHighestPrice, getLowestPrice } from "@/lib/utils";
 import { Product as ProductType } from "@/types";
 import { NextResponse } from 'next/server';
+const { performance } = require('perf_hooks');
+
 
 export const maxDuration = 10; 
 export const dynamic = 'force-dynamic'
@@ -13,6 +15,7 @@ export const revalidate = 0;
 
 export async function GET() {
   try {
+    const startTime = performance.now();
     connectToDB();
 
     const products = await Product.find({});
@@ -42,7 +45,9 @@ export async function GET() {
           { url: product.url},
           product,
         );
-
+        
+        
+        /*
         // 2.CHECK EACH PRODUCT'S STATUS AND SEND EMAIL ACCORDINGLY
          const emailNotifType = getEmailNotifType(scrapedProduct, currentProduct);
 
@@ -56,11 +61,17 @@ export async function GET() {
 
           const userEmails = updatedProduct.users.map((user: any) => user.email);
 
-          await sendEmail(emailContent, userEmails)
+          await sendEmail(emailContent, userEmails);
+         
          }
+         */
+        
 
          return updatedProduct;
       }));
+      const endTime = performance.now();
+      const elapsedTime = endTime - startTime;
+      console.log(`Execution time: ${elapsedTime} milliseconds`);
       return NextResponse.json({ 
         message: "Ok",
         data: updatedProducts,

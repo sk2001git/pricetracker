@@ -1,25 +1,21 @@
-import { getProductById, getSimilarProducts } from "@/lib/actions";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import { Product } from "@/types";
-import { formatNumber } from "@/lib/utils";
+import Modal from "@/components/Modal";
 import PriceInfoCard from "@/components/PriceInfoCard";
 import ProductCard from "@/components/ProductCard";
-import Modal from "@/components/Modal";
-
+import { getProductById, getSimilarProducts } from "@/lib/actions"
+import { formatNumber } from "@/lib/utils";
+import { Product } from "@/types";
+import Image from "next/image";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 type Props = {
-  params: {
-    id: string;
-  }
-
+  params: { id: string }
 }
 
-const ProductDetails = async ({params: {id}}: Props) => {
+const ProductDetails = async ({ params: { id } }: Props) => {
   const product: Product = await getProductById(id);
 
-  if (!product) redirect('/')
+  if(!product) redirect('/')
 
   const similarProducts = await getSimilarProducts(id);
 
@@ -30,7 +26,7 @@ const ProductDetails = async ({params: {id}}: Props) => {
           <Image 
             src={product.image}
             alt={product.title}
-            width={500}
+            width={580}
             height={400}
             className="mx-auto"
           />
@@ -48,10 +44,10 @@ const ProductDetails = async ({params: {id}}: Props) => {
                 target="_blank"
                 className="text-base text-black opacity-50"
               >
-                Visit Product 
+                Visit Product
               </Link>
             </div>
-          
+
             <div className="flex items-center gap-3">
               <div className="product-hearts">
                 <Image 
@@ -71,7 +67,16 @@ const ProductDetails = async ({params: {id}}: Props) => {
                   src="/assets/icons/bookmark.svg"
                   alt="bookmark"
                   width={20}
-                  height={20}                
+                  height={20}
+                />
+              </div>
+
+              <div className="p-2 bg-white-200 rounded-10">
+                <Image 
+                  src="/assets/icons/share.svg"
+                  alt="share"
+                  width={20}
+                  height={20}
                 />
               </div>
             </div>
@@ -96,7 +101,7 @@ const ProductDetails = async ({params: {id}}: Props) => {
                     width={16}
                     height={16}
                   />
-                  <p className= "text-sm text-primary orange font-semibold">
+                  <p className="text-sm text-primary-orange font-semibold">
                     {product.stars || '25'}
                   </p>
                 </div>
@@ -108,36 +113,37 @@ const ProductDetails = async ({params: {id}}: Props) => {
                     width={16}
                     height={16}
                   />
-                  <p>
+                  <p className="text-sm text-secondary font-semibold">
                     {product.reviewsCount} Reviews
                   </p>
                 </div>
               </div>
 
               <p className="text-sm text-black opacity-50">
-                <span className="text-primary-green font-semibold"> 93% </span> of buyers have recommended this.
+                <span className="text-primary-green font-semibold">93% </span> of
+                buyers have recommeded this.
               </p>
             </div>
           </div>
 
           <div className="my-7 flex flex-col gap-5">
             <div className="flex gap-5 flex-wrap">
-              <PriceInfoCard
+              <PriceInfoCard 
                 title="Current Price"
                 iconSrc="/assets/icons/price-tag.svg"
                 value={`${product.currency} ${formatNumber(product.currentPrice)}`}
               />
-              <PriceInfoCard
+              <PriceInfoCard 
                 title="Average Price"
                 iconSrc="/assets/icons/chart.svg"
                 value={`${product.currency} ${formatNumber(product.averagePrice)}`}
               />
-              <PriceInfoCard
+              <PriceInfoCard 
                 title="Highest Price"
                 iconSrc="/assets/icons/arrow-up.svg"
                 value={`${product.currency} ${formatNumber(product.highestPrice)}`}
               />
-              <PriceInfoCard
+              <PriceInfoCard 
                 title="Lowest Price"
                 iconSrc="/assets/icons/arrow-down.svg"
                 value={`${product.currency} ${formatNumber(product.lowestPrice)}`}
@@ -149,7 +155,7 @@ const ProductDetails = async ({params: {id}}: Props) => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-16 ">
+      <div className="flex flex-col gap-16">
         <div className="flex flex-col gap-5">
           <h3 className="text-2xl text-secondary font-semibold">
             Product Description
@@ -158,34 +164,33 @@ const ProductDetails = async ({params: {id}}: Props) => {
           <div className="flex flex-col gap-4">
             {product?.description?.split('\n')}
           </div>
-
-          <button className="btn w-fit mx-auto flex items-center justify-center gap-3 min-w-[200px]">
-            <Image 
-              src="/assets/icons/bag.svg"
-              alt="check"
-              width={22}
-              height={22}
-            />
-
-            <Link href="/" className="text-base text-white">
-              Buy Now
-            </Link>
-          </button>
         </div>
-        {similarProducts && similarProducts?.length > 0 && (
-          <div className="py-14 flex flex-col gap-2 w-full">
-            <p className="section-text">
-              Similar Products 
-            </p>
 
-            <div className="felx flex-wrap gap-10 mt-7 w-full">
-              { similarProducts.map((product: Product) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
-            </div>  
-          </div>
-        )}
+        <button className="btn w-fit mx-auto flex items-center justify-center gap-3 min-w-[200px]">
+          <Image 
+            src="/assets/icons/bag.svg"
+            alt="check"
+            width={22}
+            height={22}
+          />
+
+          <Link href="/" className="text-base text-white">
+            Buy Now
+          </Link>
+        </button>
       </div>
+
+      {similarProducts && similarProducts?.length > 0 && (
+        <div className="py-14 flex flex-col gap-2 w-full">
+          <p className="section-text">Similar Products</p>
+
+          <div className="flex flex-wrap gap-10 mt-7 w-full">
+            {similarProducts.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
