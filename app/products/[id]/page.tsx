@@ -20,16 +20,6 @@ const ProductDetails = async ({ params: { id } }: Props) => {
 
   const similarProducts = await getSimilarProducts(id);
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/api/cron'); // Replace with your API route
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  fetchData();
 
 
   return (
