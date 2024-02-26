@@ -1,7 +1,8 @@
+import DeleteButton from "@/components/Deletebutton";
 import Modal from "@/components/Modal";
 import PriceInfoCard from "@/components/PriceInfoCard";
 import ProductCard from "@/components/ProductCard";
-import { getProductById, getSimilarProducts } from "@/lib/actions"
+import { deleteProduct, getProductById, getSimilarProducts } from "@/lib/actions"
 import { formatNumber } from "@/lib/utils";
 import { Product } from "@/types";
 import Image from "next/image";
@@ -19,6 +20,9 @@ const ProductDetails = async ({ params: { id } }: Props) => {
   if(!product) redirect('/')
 
   const similarProducts = await getSimilarProducts(id);
+  const handleDeleteClick = async () => {
+    await deleteProduct(id);
+  };
 
 
 
@@ -177,9 +181,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
             height={22}
           />
 
-          <Link href="/" className="text-base text-white">
-            Buy Now
-          </Link>
+          <DeleteButton id={id} />
         </button>
       </div>
 

@@ -119,3 +119,15 @@ export async function addUserEmailToProduct(
     console.log(error);
   }
 }
+
+export async function deleteProduct(productId: string) {
+  try {
+    connectToDB();
+
+    const deletedProduct = await Product.findByIdAndDelete(productId);
+    return deletedProduct;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
