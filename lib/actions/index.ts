@@ -125,6 +125,7 @@ export async function deleteProduct(productId: string) {
     connectToDB();
 
     const deletedProduct = await Product.findByIdAndDelete(productId);
+    revalidatePath('/'); // trigger regeneration of specific path
     return deletedProduct;
   }
   catch (error) {
